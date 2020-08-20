@@ -2,36 +2,37 @@ import setuptools
 
 
 def main():
-  with open('README.md', 'r') as fp:
+  with open('README.md', 'r', encoding="utf-8") as fp:
     readme = fp.read()
 
   setuptools.setup(
-    name='latexify-py',
-    version='0.0.5',
-    description='Generates LaTeX source from Python functions.',
+    name='py2flowchart',
+    version='0.0.1',
+    description='Generates flowchart from Python functions.',
     long_description=readme,
-    long_description_type='text/markdown',
-    url='https://github.com/odashi/latexify_py',
-    author='Yusuke Oda',
-    author_email='yus.takara@gmail.com',
-    license='Apache Software License 2.0',
+	long_description_content_type="text/markdown",
+    url='https://github.com/dstang2000/py2flowchart',
+    author='Tang Dashi',
+    author_email='dstang2000@263.net',
+    license='MIT',
     classifiers=[
         'Framework :: IPython',
         'Framework :: Jupyter',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-        'Topic :: Scientific/Engineering :: Mathematics',
+        'Programming Language :: Python',
+        'Topic :: Scientific/Engineering :: Visualization',
         'Topic :: Software Development :: Code Generators',
-        'Topic :: Text Processing :: Markup :: LaTeX',
+        'Topic :: Text Processing :: Markup',
     ],
-    keywords='equation latex math mathematics',
-    packages=['latexify'],
+    keywords='python flow flowchart',
+    packages=['py2flowchart'],
     install_requires=[
         'dill>=0.3.2',
     ],
-    python_requires='>=3.6, <3.9',
+    python_requires='>=3.6',
   )
 
 
