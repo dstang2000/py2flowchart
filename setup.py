@@ -7,7 +7,7 @@ def main():
 
   setuptools.setup(
     name='py2flowchart',
-    version='0.0.1',
+    version='0.0.2',
     description='Generates flowchart from Python functions.',
     long_description=readme,
 	long_description_content_type="text/markdown",
