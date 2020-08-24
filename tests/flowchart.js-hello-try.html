@@ -64,8 +64,8 @@ operation9->end
 			{
                       //'x': 30,
                       //'y': 50,
-                      'line-width': 3,
-                      'maxWidth': 3,//ensures the flowcharts fits within a certian width
+                      'line-width': 1,
+                      //'maxWidth': 3,//ensures the flowcharts fits within a certian width
                       'line-length': 50,
                       'text-margin': 10,
                       'font-size': 14,
@@ -78,7 +78,7 @@ operation9->end
                       'fill': 'white',
                       'yes-text': 'yes',
                       'no-text': 'no',
-                      'arrow-end': 'block',
+                      'arrow-end': 'open',  //block
                       'scale': 1,
                       'symbols': {
                         'start': {
@@ -91,7 +91,7 @@ operation9->end
                         }
                       },
                       'flowstate' : {
-                        'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},
+                        'past' : { 'fill' : '#CCFFCC', 'font-size' : 12},
                         'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},
                         'future' : { 'fill' : '#FFFF99'},
                         'request' : { 'fill' : 'blue'},
