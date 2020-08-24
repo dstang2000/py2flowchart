@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>flowchart.js · hello</title>
+        <style type="text/css">
+          .end-element { fill : #FFCCFF; }
+        </style>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
+        <!-- <script src="http://flowchart.js.org/flowchart-latest.js"></script> -->
+        <!-- <script src="../release/flowchart.min.js"></script> -->
+        <script>
+			var chart;
+			function draw(){
+				var code = document.getElementById("code").value;
+				var svgstyle = document.getElementById("svgstyle").value.trim();
+				if(svgstyle){
+					svgstyle = svgstyle.replace(/\/\/.*?$/gm, "")
+						.replace(/'/g, '"').replace(/\/(?!\/)/g, "\\\/")  //.replace(/n\/a/g, "n\\/a");
+					console.log(svgstyle)  //json比js写法要严格些，包括引号及反斜杠
+					svgstyle = JSON.parse(svgstyle);
+				} else {
+					svgstyle = null;
+				}
+				if (chart) chart.clean();
+				chart = flowchart.parse(code);
+				chart.drawSVG('canvas', svgstyle)
+			}
+		</script>
+
+     </head>
+    <body>
+        <div>
+			<textarea id="code" style="width: 40%;" rows="11" onchange="draw()" onkeyup="draw()">
+
+start=>start: start
+operation1=>operation: c = 9
+condition2=>condition: while c<10|past
+operation3=>operation: c-=1
+condition4=>condition: if c>0
+inputoutput5=>inputoutput: print(c)
+inputoutput6=>inputoutput: print(c)
+inputoutput7=>inputoutput: print(c+1)
+operation8=>operation: c-=2
+operation9=>operation: return c
+end=>end: end
+start->operation1
+operation1->condition2
+condition2(yes)->operation3
+operation3->condition4
+condition4(yes)->inputoutput5
+inputoutput5->inputoutput6
+condition4(no)->inputoutput7
+inputoutput6->operation8
+inputoutput7->operation8
+operation8(left)->condition2
+condition2(no)->operation9
+operation9->end
+
+		</textarea>
+		<textarea id="svgstyle" style="width: 40%;" rows="11" onchange="draw()" onkeyup="draw()">
+			{
+                      //'x': 30,
+                      //'y': 50,
+                      'line-width': 3,
+                      'maxWidth': 3,//ensures the flowcharts fits within a certian width
+                      'line-length': 50,
+                      'text-margin': 10,
+                      'font-size': 14,
+                      'font': 'normal',
+                      'font-family': 'Helvetica',
+                      'font-weight': 'normal',
+                      'font-color': 'black',
+                      'line-color': 'black',
+                      'element-color': 'black',
+                      'fill': 'white',
+                      'yes-text': 'yes',
+                      'no-text': 'no',
+                      'arrow-end': 'block',
+                      'scale': 1,
+                      'symbols': {
+                        'start': {
+                          'font-color': 'red',
+                          'element-color': 'green',
+                          'fill': 'yellow'
+                        },
+                        'end':{
+                          'class': 'end-element'
+                        }
+                      },
+                      'flowstate' : {
+                        'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},
+                        'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},
+                        'future' : { 'fill' : '#FFFF99'},
+                        'request' : { 'fill' : 'blue'},
+                        'invalid': {'fill' : '#444444'},
+                        'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },
+                        'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }
+                      }
+                    }
+		</textarea>
+		
+		
+		</div>
+        <div><button id="draw" type="button" onclick="draw()">draw</button></div>
+        <div id="canvas"></div>
+    </body>
+</html>

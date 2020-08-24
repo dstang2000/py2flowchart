@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>py2flowchart</title>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
+    </head>
+    <body>
+        <div id="canvas"></div>
+        <pre id="code"></pre>
+        <script>
+            $("#code").html(code);
+            code= `
+start=>start: start
+operation9=>operation: year = 2022
+condition10=>condition: if year%4==0 and year%100!=0 or year%400==0
+inputoutput11=>inputoutput: print(year,"是闰年")
+inputoutput12=>inputoutput: print(year,"不是闰年")
+end=>end: end
+start->operation9
+operation9->condition10
+condition10(yes)->inputoutput11
+condition10(no)->inputoutput12
+inputoutput11->end
+inputoutput12->end
+
+`;
+            chart = flowchart.parse(code);
+            chart.drawSVG('canvas', {"line-width": 2});
+        </script>
+    </body>
+</html>

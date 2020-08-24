@@ -9,6 +9,7 @@ Generates flowchart from Python functions and python file.
 ```python
 from py2flowchart import * 
 pyfile2flowchart("xxxx.py", "xxxx.html")
+pyfile2flowchart("xxxx.py", "xxxx.html", {"line-width": 1, "arrow-end": "open"})
 
 get_flowchart("if a>b:\n    print(c)")
 
@@ -16,7 +17,7 @@ def myfun():
     pass
 get_flowchart(myfun) 
 ```
-![](tests/test1.png)
+![demo](tests/test1.png)
 
 ## FAQs
 Which Python version? ... Using 3.x AST.  

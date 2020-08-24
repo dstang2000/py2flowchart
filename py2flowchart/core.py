@@ -2,10 +2,10 @@
 # This is very scratchy and supports only limited portion of Python functions.
 #%%
 import ast
+import dill
 import math
 import inspect
-
-import dill
+import json
 
 CONDITION = "condition"
 OPERATION = "operation"
@@ -279,7 +279,7 @@ class CodeflowVisitor(ast.NodeVisitor):
             if hasattr(node.iter, "func"):
                 func = node.iter.func.id
                 args = node.iter.args
-                args = [self.visit(arg) for arg in args]
+                args = [self.visit(arg, False) for arg in args]
                 str_for = "for " + varname + " in " + func + "(" + ", ".join(
                     args) + ")"
             else:
@@ -360,26 +360,33 @@ htmltemplate = """
         <title>py2flowchart</title>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
     </head>
     <body>
         <div id="canvas"></div>
-		<pre id="code"></pre>
-		<script>
-			code= `{flowchartcode}`;
-			chart = flowchart.parse(code);
-			chart.drawSVG('canvas', {});
-			$("#code").html(code);
-		</script>
+        <pre id="code"></pre>
+        <script>
+            $("#code").html(code);
+            code= `{flowchartcode}`;
+            chart = flowchart.parse(code);
+            chart.drawSVG('canvas', {svgstyle});
+        </script>
     </body>
 </html>
 """
 
-def pyfile2flowchart(infile, outfile):
+def pyfile2flowchart(infile, outfile, svgstyle=None):
     with open(infile, encoding="utf-8") as f:
         src = f.read()
     flow = get_flowchart(src)
     content = htmltemplate.replace("{flowchartcode}", flow)
+
+    if not svgstyle:
+        svgstyle = {"line-width": 1, "arrow-end": "open"}
+    if isinstance(svgstyle, str):
+        svgstyle = json.loads(svgstyle)
+    svgstyle = json.dumps(svgstyle)
+    content = content.replace("{svgstyle}", svgstyle)
     with open(outfile, "w", encoding="utf-8") as f:
         f.write(content)
 
