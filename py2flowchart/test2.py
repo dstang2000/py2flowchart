@@ -4,6 +4,9 @@ import pytest
 
 from core import * 
 
+# if you want to show a flowchart, please visit:
+# https://flowchart.js.org
+
 #@with_flowchart
 def myfun():
     c = 9
@@ -117,4 +120,23 @@ def mypi():
 	print(s*4)
 print(get_flowchart(mypi))
 
+
+def print_sorted(dct):
+    result = sorted(dct.items())
+    for k, v in result:
+        print(k, v)
+
+def statistics():
+    txt = "hello"
+    dct = {}
+    for c in txt:
+        if c in dct:
+            dct[c] += 1
+        else:
+            dct[c] = 1
+    print(dct)
+    print_sorted(dct)
+    
+print(get_flowchart(statistics))
+print(get_flowchart(print_sorted))
 

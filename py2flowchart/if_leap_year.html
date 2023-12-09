@@ -4,32 +4,41 @@
     <head>
         <meta charset="utf-8">
         <title>py2flowchart</title>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.18.0/flowchart.min.js"></script>
     </head>
     <body>
         <div id="canvas"></div>
-        <pre id="code"></pre>
+        <pre id="code" style="display:none"></pre>
         <script>
-            $("#code").html(code);
             code= `
 start=>start: start
 operation9=>operation: year = 2022
 condition10=>condition: if year%4==0 and year%100!=0 or year%400==0
-inputoutput11=>inputoutput: print(year,"是闰年")
-inputoutput12=>inputoutput: print(year,"不是闰年")
+output11=>output: print(year,"是闰年")
+output12=>output: print(year,"不是闰年")
 end=>end: end
 start->operation9
 operation9->condition10
-condition10(yes)->inputoutput11
-condition10(no)->inputoutput12
-inputoutput11->end
-inputoutput12->end
+condition10(yes)->output11
+condition10(no)->output12
+output11->end
+output12->end
 
 `;
             chart = flowchart.parse(code);
             chart.drawSVG('canvas', {"line-width": 2});
+			console.log(code);
+			var code_pre = code.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
+            document.getElementById("code").innerHTML = code_pre;
         </script>
+		<script>
+		// double click to copy svg to clipboard
+		document.ondblclick = async () => {
+			var svg = document.getElementsByTagName('svg')[0];
+			await navigator.clipboard.writeText(svg.outerHTML);
+		}
+		</script>
+		<!-- see https://github.com/dstang2000/py2flowchart -->
     </body>
 </html>

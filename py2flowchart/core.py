@@ -1,19 +1,26 @@
 #coding:utf-8
 # This is very scratchy and supports only limited portion of Python functions.
+# https://github.com/dstang2000/py2flowchart
+# author: Tang Dashi
+
 #%%
 import ast
 import dill
 import math
 import inspect
 import json
+import re
 
 CONDITION = "condition"
 OPERATION = "operation"
 INPUTOUTPUT = "inputoutput"
+INPUT = "input"
+OUTPUT = "output"
 PARALLEL = "parallel"
 SUBROUTINE = "subroutine"
 START = "start"
 END = "end"
+builtins_names = dir(__builtins__)
 fnode_id = 0
 
 
@@ -202,8 +209,15 @@ class CodeflowVisitor(ast.NodeVisitor):
 
         if addfnode:
             ftype = OPERATION
-            if "input(" in src or "print(" in src or "write(" in src or "read(" in src:
-                ftype = INPUTOUTPUT
+            if "input(" in src or "read(" in src:
+                ftype = INPUT
+            elif "print(" in src or "write(" in src:
+                ftype = OUTPUT
+            elif "=" not in src:
+                first_word = re.search(r"^\s*([a-zA-Z_]\w+)\s*\(", src) #有圆括号的调用
+                if first_word: 
+                    #and first_word.group(1) not in builtins_names:
+                    ftype = SUBROUTINE
             self._add_fnode(ftype, src)
 
         return src
@@ -358,19 +372,28 @@ htmltemplate = """
     <head>
         <meta charset="utf-8">
         <title>py2flowchart</title>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/flowchart/1.14.0/flowchart.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.18.0/flowchart.min.js"></script>
     </head>
     <body>
         <div id="canvas"></div>
-        <pre id="code"></pre>
+        <pre id="code" style="display:none"></pre>
         <script>
-            $("#code").html(code);
             code= `{flowchartcode}`;
             chart = flowchart.parse(code);
-            chart.drawSVG('canvas', {svgstyle});
+            chart.drawSVG('canvas', {"line-width": 2});
+			console.log(code);
+			var code_pre = code.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
+            document.getElementById("code").innerHTML = code_pre;
         </script>
+		<script>
+		// double click to copy svg to clipboard
+		document.ondblclick = async () => {
+			var svg = document.getElementsByTagName('svg')[0];
+			await navigator.clipboard.writeText(svg.outerHTML);
+		}
+		</script>
+		<!-- see https://github.com/dstang2000/py2flowchart -->
     </body>
 </html>
 """
